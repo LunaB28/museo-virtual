@@ -1,4 +1,4 @@
-import StellarCarousel from './components/carrousel';
+import carrousel from './components/carrousel';
 import FlipBook from './components/FlipBook';
 
 function App() {
@@ -56,7 +56,7 @@ function App() {
   return (
     <>
      <div className=''>
-         <StellarCarousel 
+         <carrousel 
         slides={mySlides}
         autoStart={false}
         initialSpeed="normal"

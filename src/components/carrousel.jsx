@@ -1,35 +1,19 @@
 import { useState, useEffect, useRef } from 'react';
+import Modal from './modal';
 import '../StellarCarousel.css';
 
-function StellarCarousel({ slides, autoStart = false, initialSpeed = 'normal' }) {
-  const [loading, setLoading] = useState(true);
-  const [loadingProgress, setLoadingProgress] = useState(0);
+function Carrousel({ images }) {
   const [activeIdx, setActiveIdx] = useState(0);
   const [muted, setMuted] = useState(false);
-  const [currentSlides] = useState(slides);
+  const [currentSlides] = useState(images);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const starfieldRef = useRef(null);
   const particlesRef = useRef(null);
-  const cursorRef = useRef(null);
   const carouselRef = useRef(null);
   const audioContextRef = useRef(null);
   const gainNodeRef = useRef(null);
-
-  // Loading effect
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setLoadingProgress(prev => {
-        const newProgress = prev + Math.random() * 18;
-        if (newProgress >= 100) {
-          clearInterval(interval);
-          setTimeout(() => setLoading(false), 400);
-          return 100;
-        }
-        return newProgress;
-      });
-    }, 180);
-    return () => clearInterval(interval);
-  }, []);
 
   // Initialize Audio
   useEffect(() => {
@@ -68,7 +52,7 @@ function StellarCarousel({ slides, autoStart = false, initialSpeed = 'normal' })
 
   // Starfield effect
   useEffect(() => {
-    if (!starfieldRef.current || loading) return;
+    if (!starfieldRef.current) return;
     
     const canvas = starfieldRef.current;
     const ctx = canvas.getContext('2d');
@@ -116,11 +100,11 @@ function StellarCarousel({ slides, autoStart = false, initialSpeed = 'normal' })
       window.removeEventListener('resize', resize);
       cancelAnimationFrame(animationId);
     };
-  }, [loading]);
+  }, []);
 
   // Particles effect
   useEffect(() => {
-    if (!particlesRef.current || loading) return;
+    if (!particlesRef.current) return;
     
     const canvas = particlesRef.current;
     const ctx = canvas.getContext('2d');
@@ -169,38 +153,6 @@ function StellarCarousel({ slides, autoStart = false, initialSpeed = 'normal' })
     return () => {
       window.removeEventListener('resize', resize);
       cancelAnimationFrame(animationId);
-    };
-  }, [loading]);
-
-  // Custom cursor
-  useEffect(() => {
-    if (!cursorRef.current) return;
-    
-    const cursor = cursorRef.current;
-    
-    const handleMouseMove = (e) => {
-      cursor.style.transform = `translate(${e.clientX - 16}px, ${e.clientY - 16}px) scale(1)`;
-      cursor.style.opacity = '0.8';
-    };
-    
-    const handleMouseDown = () => {
-      cursor.style.transform += ' scale(0.7)';
-      cursor.style.opacity = '0.5';
-    };
-    
-    const handleMouseUp = () => {
-      cursor.style.transform = cursor.style.transform.replace(' scale(0.7)', ' scale(1)');
-      cursor.style.opacity = '0.8';
-    };
-
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mousedown', handleMouseDown);
-    document.addEventListener('mouseup', handleMouseUp);
-
-    return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mousedown', handleMouseDown);
-      document.removeEventListener('mouseup', handleMouseUp);
     };
   }, []);
 
@@ -268,6 +220,16 @@ function StellarCarousel({ slides, autoStart = false, initialSpeed = 'normal' })
     playNavSound();
   };
 
+  const handleImageClick = (imageUrl, index) => {
+    setSelectedImage({ src: imageUrl, alt: `Slide ${index + 1}` });
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedImage(null);
+  };
+
   const getSlideStyle = (index) => {
     const angleStep = 360 / currentSlides.length;
     const angle = ((index - activeIdx) * angleStep * Math.PI) / 180;
@@ -280,45 +242,35 @@ function StellarCarousel({ slides, autoStart = false, initialSpeed = 'normal' })
     };
   };
 
-  if (loading) {
-    return (
-      <div id="loading-screen" role="status" aria-live="polite">
-        <div>
-          <span style={{ fontSize: '2.2rem', color: 'var(--stellar-gold)', fontFamily: 'var(--font-main)' }}>
-            Stellar Slide Navigator
-          </span>
-          <div id="loading-progress" aria-label="Loading progress">
-            <div id="loading-bar" style={{ width: `${Math.floor(loadingProgress)}%` }}></div>
-          </div>
-          <span id="loading-text" style={{ marginTop: '12px', fontSize: '1rem', color: '#fff' }}>
-            Loading assets... {Math.floor(loadingProgress)}%
-          </span>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <>
       <canvas ref={starfieldRef} id="starfield" aria-hidden="true"></canvas>
       <canvas ref={particlesRef} id="particles" aria-hidden="true"></canvas>
-      <div ref={cursorRef} id="custom-cursor" aria-hidden="true"></div>
       
       <main id="carousel-container" tabIndex="-1">
         <section ref={carouselRef} id="stellar-carousel" aria-label="Stellar Slide Carousel" tabIndex="0">
-          {currentSlides.map((slide, index) => (
+          {currentSlides.map((imageUrl, index) => (
             <div
               key={index}
               className={`carousel-slide ${index === activeIdx ? 'active' : ''}`}
               style={getSlideStyle(index)}
               tabIndex="0"
               role="group"
-              aria-label={`${slide.title}: ${slide.desc}`}
+              aria-label={`Slide ${index + 1}`}
               aria-hidden={index !== activeIdx}
             >
-              <span className="slide-icon">{slide.icon}</span>
-              <span className="slide-title">{slide.title}</span>
-              <span className="slide-desc">{slide.desc}</span>
+              <img 
+                src={imageUrl} 
+                alt={`Slide ${index + 1}`}
+                onClick={() => handleImageClick(imageUrl, index)}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  borderRadius: '24px',
+                  cursor: 'pointer'
+                }}
+              />
             </div>
           ))}
         </section>
@@ -333,14 +285,20 @@ function StellarCarousel({ slides, autoStart = false, initialSpeed = 'normal' })
             <button
               key={index}
               className={`dot ${index === activeIdx ? 'active' : ''}`}
-              aria-label={`Go to slide ${index + 1}: ${currentSlides[index].title}`}
+              aria-label={`Go to slide ${index + 1}`}
               onClick={() => handleGoTo(index)}
             />
           ))}
         </nav>
       </main>
+      
+      <Modal 
+        isOpen={isModalOpen} 
+        onClose={closeModal} 
+        image={selectedImage} 
+      />
     </>
   );
 }
 
-export default StellarCarousel;
+export default Carrousel;

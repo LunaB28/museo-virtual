@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import App from './App';
+import App from './pages/proceso';
 
 test('renders learn react link', () => {
   render(<App />);
