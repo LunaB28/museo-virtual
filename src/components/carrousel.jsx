@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import Modal from './modal';
-import '../StellarCarousel.css';
+import '../style/StellarCarousel.css';
 
 function Carrousel({ images }) {
   const [activeIdx, setActiveIdx] = useState(0);
@@ -9,8 +9,6 @@ function Carrousel({ images }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
 
-  const starfieldRef = useRef(null);
-  const particlesRef = useRef(null);
   const carouselRef = useRef(null);
   const audioContextRef = useRef(null);
   const gainNodeRef = useRef(null);
@@ -48,112 +46,6 @@ function Carrousel({ images }) {
     } catch (error) {
       console.warn("Audio not supported:", error);
     }
-  }, []);
-
-  // Starfield effect
-  useEffect(() => {
-    if (!starfieldRef.current) return;
-    
-    const canvas = starfieldRef.current;
-    const ctx = canvas.getContext('2d');
-    let stars = [];
-    let animationId;
-
-    const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      stars = [];
-      for (let l = 0; l < 3; l++) {
-        for (let i = 0; i < 80 + l * 40; i++) {
-          stars.push({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            z: l + 1,
-            r: Math.random() * (1.2 + l * 0.6),
-            alpha: 0.5 + Math.random() * 0.5
-          });
-        }
-      }
-    };
-
-    const draw = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (const s of stars) {
-        ctx.save();
-        ctx.globalAlpha = s.alpha;
-        ctx.beginPath();
-        ctx.arc(s.x, s.y, s.r, 0, 2 * Math.PI);
-        ctx.fillStyle = s.z === 1 ? "#fff" : s.z === 2 ? "#ffd700" : "#6c3fd1";
-        ctx.shadowColor = "#fff";
-        ctx.shadowBlur = 8 * s.z;
-        ctx.fill();
-        ctx.restore();
-      }
-      animationId = requestAnimationFrame(draw);
-    };
-
-    resize();
-    draw();
-    window.addEventListener('resize', resize);
-
-    return () => {
-      window.removeEventListener('resize', resize);
-      cancelAnimationFrame(animationId);
-    };
-  }, []);
-
-  // Particles effect
-  useEffect(() => {
-    if (!particlesRef.current) return;
-    
-    const canvas = particlesRef.current;
-    const ctx = canvas.getContext('2d');
-    let particles = [];
-    let animationId;
-
-    const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      particles = [];
-      for (let i = 0; i < 48; i++) {
-        particles.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          vx: (Math.random() - 0.5) * 0.8,
-          vy: (Math.random() - 0.5) * 0.8,
-          r: 2 + Math.random() * 3,
-          color: `rgba(108,63,209,${0.5 + Math.random() * 0.5})`
-        });
-      }
-    };
-
-    const draw = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (const p of particles) {
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, 2 * Math.PI);
-        ctx.fillStyle = p.color;
-        ctx.shadowColor = "#ffd700";
-        ctx.shadowBlur = 8;
-        ctx.fill();
-        ctx.restore();
-        p.x += p.vx;
-        p.y += p.vy;
-        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
-        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
-      }
-      animationId = requestAnimationFrame(draw);
-    };
-
-    resize();
-    draw();
-    window.addEventListener('resize', resize);
-
-    return () => {
-      window.removeEventListener('resize', resize);
-      cancelAnimationFrame(animationId);
-    };
   }, []);
 
   // Keyboard navigation
@@ -244,9 +136,6 @@ function Carrousel({ images }) {
 
   return (
     <>
-      <canvas ref={starfieldRef} id="starfield" aria-hidden="true"></canvas>
-      <canvas ref={particlesRef} id="particles" aria-hidden="true"></canvas>
-      
       <main id="carousel-container" tabIndex="-1">
         <section ref={carouselRef} id="stellar-carousel" aria-label="Stellar Slide Carousel" tabIndex="0">
           {currentSlides.map((imageUrl, index) => (
@@ -266,7 +155,7 @@ function Carrousel({ images }) {
                 style={{
                   width: '100%',
                   height: '100%',
-                  objectFit: 'cover',
+                  objectFit: 'contain',
                   borderRadius: '24px',
                   cursor: 'pointer'
                 }}

@@ -1,0 +1,52 @@
+.card-height{
+height: 80vh;
+width: 80vw;
+}
+
+.l-btn{
+width: 80vw;
+height: 10vh;
+font-size: 8vw;
+background-color: #EB921E;
+color: white;
+font-family:Georgia, 'Times New Roman', Times, serif;
+}
+
+.l-group{
+height: 10vh;
+width: 50vw;
+font-size: 6vw;
+font-family:Georgia, 'Times New Roman', Times, serif;
+}
+
+.btn-a{
+background-color: #6b1d3e;
+border-color: #61082B;
+color: white;
+}
+.btn-a:active, .btn-a:focus, .btn-a:hover{
+background-color: #5d2038;
+border-color: #5d2038;
+}
+
+.btn-b{
+background-color: #ebaf48;
+border-color: #efa72f; 
+color: white;
+}
+
+.btn-b:active, .btn-b:focus, .btn-b:hover{
+background-color: #c69136;
+border-color: #c69136;
+}   
+
+.btn-c{
+background-color: #B84E0C;
+border-color: #B84E0C;
+color: white;
+}   
+
+.btn-c:active, .btn-c:focus, .btn-c:hover{
+background-color: #8e3e09;
+border-color: #8e3e09;
+}

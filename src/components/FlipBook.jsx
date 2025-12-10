@@ -1,6 +1,6 @@
 import React, { useRef, forwardRef } from 'react';
 import HTMLFlipBook from 'react-pageflip';
-import '../FlipBook.css';
+import '../style/FlipBook.css';
 
 const PageCover = forwardRef((props, ref) => {
   return (
@@ -17,7 +17,6 @@ const Page = forwardRef((props, ref) => {
     <div className="page" ref={ref}>
       <div className="page-content">
         <h2 className="page-header">Page header - {props.number}</h2>
-        <div className="page-image"></div>
         <div className="page-text">{props.children}</div>
         <div className="page-footer">{props.number + 1}</div>
       </div>

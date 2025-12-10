@@ -14,7 +14,7 @@
 }
 
 .page {
-  background: white;
+  background: #FFF8E7;
   color: #000;
   border: 1px solid #ccc;
   overflow: hidden;
@@ -22,7 +22,7 @@
 }
 
 .page-cover {
-  background: linear-gradient(135deg, var(--cosmic-purple) 0%, var(--space-blue) 100%);
+  background: #440E03;
   color: white;
   border: none;
 }
