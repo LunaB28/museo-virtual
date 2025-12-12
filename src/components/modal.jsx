@@ -1,12 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import '../style/modal.css';
 
 const Modal = ({ isOpen, onClose, image, fichaTecnica }) => {
+    const [isLandscape, setIsLandscape] = useState(false);
+
+    useEffect(() => {
+        const updateOrientation = () => {
+            setIsLandscape(window.innerWidth > window.innerHeight);
+        };
+
+        updateOrientation();
+        window.addEventListener('resize', updateOrientation);
+        return () => window.removeEventListener('resize', updateOrientation);
+    }, []);
+
     if (!isOpen) return null;
 
     return (
         <div className="modal-overlay" onClick={onClose}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className={`modal-content ${isLandscape ? 'landscape' : 'portrait'}`} onClick={(e) => e.stopPropagation()}>
                 <button className="modal-close" onClick={onClose}>
                     ×
                 </button>

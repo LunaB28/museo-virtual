@@ -30,24 +30,45 @@ const FlipBook = ({ pages = [], coverTitle = "BOOK TITLE", endTitle = "THE END" 
   const gainNodeRef = useRef(null);
   const [bookSize, setBookSize] = useState({ width: 380, height: 550 });
   const [scale, setScale] = useState(1);
+  const [isLandscape, setIsLandscape] = useState(false);
 
-  // Calcular tamaño del libro basado en el ancho de la ventana
   useEffect(() => {
     const updateBookSize = () => {
       const windowWidth = window.innerWidth;
+      const windowHeight = window.innerHeight;
       
-      if (windowWidth <= 412) {
-        // Para pantallas pequeñas, usar 90% del ancho (sin límite máximo)
-        const width = windowWidth * 0.9;
-        const height = (width * 550) / 380; // Mantener proporción
-        const scaleFactor = width / 380; // Calcular factor de escala
-        setBookSize({ width: Math.floor(width), height: Math.floor(height) });
-        setScale(scaleFactor);
+      // Detectar orientación
+      setIsLandscape(windowWidth > windowHeight);
+      
+      // Siempre ajustar al 90% del espacio disponible
+      const maxWidth = windowWidth * 0.9;
+      const maxHeight = windowHeight * 0.9;
+      
+      let width, height, scaleFactor;
+      
+      // Si el espacio disponible es menor que el tamaño original, escalar
+      if (maxWidth < 380 || maxHeight < 550) {
+        // Mantener proporción 380:550 y usar el factor limitante
+        if (maxWidth / 380 < maxHeight / 550) {
+          // Limitado por ancho
+          width = maxWidth;
+          height = (width * 550) / 380;
+        } else {
+          // Limitado por alto
+          height = maxHeight;
+          width = (height * 380) / 550;
+        }
+        
+        scaleFactor = Math.min(width / 380, height / 550);
       } else {
-        // Tamaño original
-        setBookSize({ width: 380, height: 550 });
-        setScale(1);
+        // Usar tamaño original pero también calcular scale para espacios grandes
+        width = 380;
+        height = 550;
+        scaleFactor = 1;
       }
+      
+      setBookSize({ width: Math.floor(width), height: Math.floor(height) });
+      setScale(scaleFactor);
     };
 
     updateBookSize();
@@ -109,23 +130,31 @@ const FlipBook = ({ pages = [], coverTitle = "BOOK TITLE", endTitle = "THE END" 
     <div className="flipbook-container">
       <style>{`
         .demo-book .page-content {
-          font-size: ${scale}rem;
+          font-size: ${isLandscape ? 2.5 * scale + 'vmin' : 1 * scale + 'rem'};
+          padding: ${Math.max(10, 20 * scale)}px;
         }
         .demo-book .page-header {
-          font-size: ${1.2 * scale}rem;
+          font-size: ${isLandscape ? 3 * scale + 'vmin' : 1.2 * scale + 'rem'};
+          margin-bottom: ${Math.max(0.5, 1 * scale)}rem;
+          padding-bottom: ${Math.max(0.25, 0.5 * scale)}rem;
+          border-bottom-width: ${Math.max(1, 2 * scale)}px;
         }
         .demo-book .page-text {
-          font-size: ${1 * scale}rem;
+          font-size: ${isLandscape ? 2.2 * scale + 'vmin' : 1 * scale + 'rem'};
+          line-height: ${scale < 0.8 ? 1.4 : 1.6};
         }
         .demo-book .page-footer {
-          font-size: ${0.9 * scale}rem;
+          font-size: ${isLandscape ? 2.2 * scale + 'vmin' : 0.9 * scale + 'rem'};
+          margin-top: ${Math.max(0.5, 1 * scale)}rem;
+          padding-top: ${Math.max(0.25, 0.5 * scale)}rem;
         }
         .demo-book .page-cover .page-content {
-          font-size: ${2 * scale}rem;
+          font-size: ${isLandscape ? 3 * scale + 'vmin' : 2 * scale + 'rem'};
+          padding: ${Math.max(1, 2 * scale)}rem;
         }
       `}</style>
       <HTMLFlipBook
-        key={`${bookSize.width}-${bookSize.height}`}
+        key={`${bookSize.width}-${bookSize.height}-${isLandscape}`}
         width={bookSize.width}
         height={bookSize.height}
         size="stretch"
@@ -139,6 +168,7 @@ const FlipBook = ({ pages = [], coverTitle = "BOOK TITLE", endTitle = "THE END" 
         className="demo-book"
         ref={flipBookRef}
         onFlip={handleFlip}
+        usePortrait={!isLandscape}
       >
         <PageCover>{coverTitle}</PageCover>
         

@@ -8,6 +8,7 @@ function Carrousel({ images, fichasTecnicas = [] }) {
   const [currentSlides] = useState(images);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [showInstructions, setShowInstructions] = useState(false);
 
   const carouselRef = useRef(null);
   const audioContextRef = useRef(null);
@@ -15,6 +16,19 @@ function Carrousel({ images, fichasTecnicas = [] }) {
 
   // Obtener ficha técnica actual
   const currentFicha = fichasTecnicas[activeIdx] || null;
+
+  // Mostrar instrucciones solo la primera vez
+  useEffect(() => {
+    const hasSeenInstructions = localStorage.getItem('carouselInstructionsSeen');
+    if (!hasSeenInstructions) {
+      setShowInstructions(true);
+    }
+  }, []);
+
+  const closeInstructions = () => {
+    setShowInstructions(false);
+    localStorage.setItem('carouselInstructionsSeen', 'true');
+  };
 
   // Initialize Audio
   useEffect(() => {
@@ -124,6 +138,16 @@ function Carrousel({ images, fichasTecnicas = [] }) {
 
   return (
     <>
+      {showInstructions && (
+        <div className="instructions-modal" onClick={closeInstructions}>
+          <img 
+            src="https://img1.picmix.com/output/stamp/normal/3/5/4/4/2384453_cf46d.gif" 
+            alt="Instrucciones del carrusel"
+            className="instructions-gif"
+          />
+        </div>
+      )}
+      
       <main id="carousel-container" tabIndex="-1">
         <section ref={carouselRef} id="stellar-carousel" aria-label="Stellar Slide Carousel" tabIndex="0">
           {currentSlides.map((imageUrl, index) => (

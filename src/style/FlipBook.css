@@ -13,6 +13,15 @@
   margin: 0 auto;
 }
 
+.demo-book * {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.demo-book *::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
 .page {
   background: #FFF8E7;
   color: #000;
@@ -32,7 +41,6 @@
   align-items: center;
   justify-content: center;
   height: 100%;
-  font-size: 2rem;
   text-align: center;
   padding: 2rem;
 }
@@ -47,7 +55,6 @@
 }
 
 .page-header {
-  font-size: 1.2rem;
   margin-bottom: 1rem;
   color: var(--cosmic-purple);
   border-bottom: 2px solid var(--cosmic-purple);
@@ -64,11 +71,15 @@
 
 .page-text {
   flex: 1;
-  font-size: 1rem;
-  line-height: 1.6;
   text-align: justify;
-  overflow: hidden;
+  overflow: scroll;
   white-space: pre-line;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.page-text::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
 
 .page-footer {
@@ -92,6 +103,4 @@
     padding: 0.25rem;
     width: 100%;
   }
-}
-
 }

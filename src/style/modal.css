@@ -14,8 +14,6 @@
 
 .modal-content {
   position: relative;
-  width: 90vw;
-  height: 80vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -24,12 +22,48 @@
   animation: scaleIn 0.3s ease-in-out;
 }
 
+/* Modo Horizontal (Landscape) */
+.modal-content.landscape {
+  width: 85vw;
+  max-width: 85vw;
+  height: 85vh;
+  max-height: 85vh;
+  margin: 7.5vh 7.5vw;
+  gap: 2rem;
+  flex-direction: row-reverse;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Modo Vertical (Portrait) */
+.modal-content.portrait {
+  width: 85vw;
+  max-width: 85vw;
+  height: 85vh;
+  max-height: 85vh;
+  margin: 7.5vh 7.5vw;
+  gap: 1rem;
+  flex-direction: column;
+}
+
 .modal-image {
   width: 100%;
   height: 100%;
   object-fit: contain;
   border-radius: 12px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Imagen en modo landscape */
+.modal-content.landscape .modal-image {
+  max-height: 80vh;
+  max-width: 70%;
+  flex: 1;
+}
+
+/* Imagen en modo portrait */
+.modal-content.portrait .modal-image {
+  max-height: 55vh;
 }
 
 .modal-close {
@@ -96,21 +130,60 @@
   width: 90%;
   color: white;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.ficha-tecnica-modal::-webkit-scrollbar {
+  display: none;
+}
+
+/* Ficha técnica en modo landscape */
+.modal-content.landscape .ficha-tecnica-modal {
+  max-height: 80vh;
+  max-width: 280px;
+  width: 25%;
+  min-width: 240px;
+  align-self: center;
+  flex-shrink: 0;
+  padding: 1.2rem;
+}
+
+.modal-content.landscape .ficha-tecnica-modal h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.8rem;
+}
+
+.modal-content.landscape .ficha-tecnica-modal p {
+  font-size: 0.8rem;
+  margin: 0.4rem 0;
+  line-height: 1.4;
+}
+
+/* Ficha técnica en modo portrait */
+.modal-content.portrait .ficha-tecnica-modal {
   max-height: 30vh;
+}
+
+.modal-content.portrait .ficha-tecnica-modal h3 {
+  font-size: 1.5rem;
+}
+
+.modal-content.portrait .ficha-tecnica-modal p {
+  font-size: 0.95rem;
+  line-height: 1.5;
 }
 
 .ficha-tecnica-modal h3 {
   margin: 0 0 1rem 0;
   color: #EB921E;
-  font-size: 1.5rem;
   border-bottom: 2px solid #EB921E;
   padding-bottom: 0.5rem;
 }
 
 .ficha-tecnica-modal p {
   margin: 0.5rem 0;
-  font-size: 0.95rem;
-  line-height: 1.5;
 }
 
 .ficha-tecnica-modal p strong {
