@@ -17,8 +17,10 @@
   width: 90vw;
   height: 80vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 1rem;
   animation: scaleIn 0.3s ease-in-out;
 }
 
@@ -80,5 +82,56 @@
   .modal-close {
     top: 10px;
     right: 10px;
+  }
+}
+
+/* Ficha Técnica en Modal */
+.ficha-tecnica-modal {
+  background: rgba(68, 14, 3, 0.95);
+  backdrop-filter: blur(10px);
+  border: 2px solid #EB921E;
+  border-radius: 12px;
+  padding: 1.5rem;
+  max-width: 600px;
+  width: 90%;
+  color: white;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  max-height: 30vh;
+}
+
+.ficha-tecnica-modal h3 {
+  margin: 0 0 1rem 0;
+  color: #EB921E;
+  font-size: 1.5rem;
+  border-bottom: 2px solid #EB921E;
+  padding-bottom: 0.5rem;
+}
+
+.ficha-tecnica-modal p {
+  margin: 0.5rem 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.ficha-tecnica-modal p strong {
+  color: #EB921E;
+}
+
+.ficha-tecnica-modal .descripcion {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(235, 146, 30, 0.3);
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .ficha-tecnica-modal {
+    padding: 1rem;
+    font-size: 0.85rem;
+    max-height: 25vh;
+  }
+  
+  .ficha-tecnica-modal h3 {
+    font-size: 1.2rem;
   }
 }

@@ -8,6 +8,8 @@
   --slide-height: 40vh;
   --carousel-radius: 350px;
   --carousel-perspective: 1200px;
+  --dot-size: 12px;
+  --nav-size: 60px;
 }
 
 /* General Reset & Layout */
@@ -128,6 +130,8 @@ body {
 .nav-btn {
   width: var(--nav-size);
   height: var(--nav-size);
+  min-width: var(--nav-size);
+  min-height: var(--nav-size);
   background: #f549273c;
   border: none;
   border-radius: 50%;
@@ -160,12 +164,15 @@ body {
 .dot {
   width: var(--dot-size);
   height: var(--dot-size);
+  min-width: var(--dot-size);
+  min-height: var(--dot-size);
   border-radius: 50%;
   background: #222;
   border: 2px solid #F54927;
   cursor: pointer;
   transition: background 0.2s, border 0.2s, transform 0.2s;
   outline: none;
+  flex-shrink: 0;
 }
 .dot.active {
   background: #a4260c;
@@ -223,6 +230,32 @@ body {
 }
 
 /* Responsive Design */
+
+/* Media queries para landscape (pantallas horizontales) */
+@media (orientation: landscape) and (min-width: 768px) {
+  :root {
+    --dot-size: 10px;
+  }
+  #dot-nav {
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .dot {
+    width: var(--dot-size);
+    height: var(--dot-size);
+  }
+}
+
+@media (orientation: landscape) and (min-width: 1024px) {
+  :root {
+    --dot-size: 12px;
+  }
+  #dot-nav {
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+}
+
 @media (max-width: 1200px) {
   :root {
     --slide-width: 60vw;

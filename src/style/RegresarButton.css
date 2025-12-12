@@ -1,0 +1,40 @@
+.regresar-btn {
+  z-index: 1000;
+  text-decoration: none;
+  font-size: 1.5rem;
+  background: rgba(68, 14, 3, 0.7);
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+}
+
+.regresar-btn .texto-completo {
+  display: inline;
+}
+
+.regresar-btn .texto-corto {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .regresar-btn {
+    font-size: 1rem;
+    padding: 0.4rem 0.8rem;
+    margin: 0.5rem !important;
+  }
+}
+
+@media (max-width: 412px) {
+  .regresar-btn {
+    font-size: 1.2rem;
+    padding: 0.4rem 0.6rem;
+    margin: 0.3rem !important;
+  }
+  
+  .regresar-btn .texto-completo {
+    display: none;
+  }
+  
+  .regresar-btn .texto-corto {
+    display: inline;
+  }
+}

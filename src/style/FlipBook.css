@@ -68,6 +68,7 @@
   line-height: 1.6;
   text-align: justify;
   overflow: hidden;
+  white-space: pre-line;
 }
 
 .page-footer {
@@ -84,4 +85,13 @@
   .flipbook-container {
     padding: 0.5rem;
   }
+}
+
+@media (max-width: 412px) {
+  .flipbook-container {
+    padding: 0.25rem;
+    width: 100%;
+  }
+}
+
 }

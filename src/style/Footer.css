@@ -1,0 +1,28 @@
+.app-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    padding: 0.5rem 1rem;
+    text-align: center;
+    z-index: 999;
+    font-size: 0.85rem;
+}
+
+.app-footer p {
+    margin: 0;
+    color: #fff;
+}
+
+.app-footer a {
+    color: #EB921E;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.app-footer a:hover {
+    color: #ff9f2e;
+    text-decoration: underline;
+}

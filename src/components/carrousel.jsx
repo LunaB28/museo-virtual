@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import Modal from './modal';
 import '../style/StellarCarousel.css';
 
-function Carrousel({ images }) {
+function Carrousel({ images, fichasTecnicas = [] }) {
   const [activeIdx, setActiveIdx] = useState(0);
   const [muted, setMuted] = useState(false);
   const [currentSlides] = useState(images);
@@ -13,6 +13,9 @@ function Carrousel({ images }) {
   const audioContextRef = useRef(null);
   const gainNodeRef = useRef(null);
 
+  // Obtener ficha técnica actual
+  const currentFicha = fichasTecnicas[activeIdx] || null;
+
   // Initialize Audio
   useEffect(() => {
     try {
@@ -20,29 +23,9 @@ function Carrousel({ images }) {
       audioContextRef.current = new AudioContext();
       gainNodeRef.current = audioContextRef.current.createGain();
       gainNodeRef.current.connect(audioContextRef.current.destination);
-      gainNodeRef.current.gain.value = 0.7;
+      gainNodeRef.current.gain.value = 0.5;
 
-      // Create ambient sound
-      const oscillator1 = audioContextRef.current.createOscillator();
-      const oscillator2 = audioContextRef.current.createOscillator();
-      const filter = audioContextRef.current.createBiquadFilter();
-      const ambientGain = audioContextRef.current.createGain();
-
-      oscillator1.type = "sine";
-      oscillator1.frequency.setValueAtTime(40, audioContextRef.current.currentTime);
-      oscillator2.type = "sine";
-      oscillator2.frequency.setValueAtTime(80.1, audioContextRef.current.currentTime);
-      filter.type = "lowpass";
-      filter.frequency.setValueAtTime(200, audioContextRef.current.currentTime);
-      ambientGain.gain.setValueAtTime(0.05, audioContextRef.current.currentTime);
-
-      oscillator1.connect(filter);
-      oscillator2.connect(filter);
-      filter.connect(ambientGain);
-      ambientGain.connect(gainNodeRef.current);
-
-      oscillator1.start();
-      oscillator2.start();
+      // Ambient sound eliminado - solo sonidos de navegación
     } catch (error) {
       console.warn("Audio not supported:", error);
     }
@@ -83,18 +66,19 @@ function Carrousel({ images }) {
     const oscillator = audioContextRef.current.createOscillator();
     const gain = audioContextRef.current.createGain();
 
-    oscillator.type = "sine";
-    oscillator.frequency.setValueAtTime(800, audioContextRef.current.currentTime);
-    oscillator.frequency.exponentialRampToValueAtTime(400, audioContextRef.current.currentTime + 0.2);
+    // Sonido seco tipo "click"
+    oscillator.type = "square";
+    oscillator.frequency.setValueAtTime(150, audioContextRef.current.currentTime);
+    oscillator.frequency.exponentialRampToValueAtTime(100, audioContextRef.current.currentTime + 0.05);
 
-    gain.gain.setValueAtTime(0.1, audioContextRef.current.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, audioContextRef.current.currentTime + 0.2);
+    gain.gain.setValueAtTime(0.15, audioContextRef.current.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioContextRef.current.currentTime + 0.05);
 
     oscillator.connect(gain);
     gain.connect(gainNodeRef.current);
 
     oscillator.start();
-    oscillator.stop(audioContextRef.current.currentTime + 0.2);
+    oscillator.stop(audioContextRef.current.currentTime + 0.05);
   };
 
   const handleNext = () => {
@@ -113,7 +97,11 @@ function Carrousel({ images }) {
   };
 
   const handleImageClick = (imageUrl, index) => {
-    setSelectedImage({ src: imageUrl, alt: `Slide ${index + 1}` });
+    setSelectedImage({ 
+      src: imageUrl, 
+      alt: `Slide ${index + 1}`,
+      ficha: fichasTecnicas[index] 
+    });
     setIsModalOpen(true);
   };
 
@@ -184,7 +172,8 @@ function Carrousel({ images }) {
       <Modal 
         isOpen={isModalOpen} 
         onClose={closeModal} 
-        image={selectedImage} 
+        image={selectedImage}
+        fichaTecnica={selectedImage?.ficha}
       />
     </>
   );
